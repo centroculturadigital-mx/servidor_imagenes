@@ -9,7 +9,7 @@ const open = require("open");
 
 const views = require('koa-views');
 
-app.host = process.env.IP || 'localhost';
+app.host = process.env.IP || '127.0.0.1';
 app.port = process.env.PORT || 8000;
 
 
@@ -33,7 +33,11 @@ router.get('/', async (ctx, next) => {
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-const server = app.listen(app.port, app.host, () => {
-    open('http://127.0.0.1:8000');
-  console.log('Koa server listening on %s:%d', server.address().address, server.address().port);
-});
+const server = app.listen(app.port);
+
+console.log("image uploader in port", app.port);
+
+// const server = app.listen(app.port, app.host, () => {
+//     open('http://127.0.0.1:8000');
+//   console.log('Koa server listening on %s:%d', server.address().address, server.address().port);
+// });
