@@ -1,18 +1,20 @@
 version: "3"
 services:
-  furenku_image_server:
-    image: 'imazen/imageflow_server_unsecured:latest'
-    entrypoint: '/bin/sh -c "sudo chown -R imageflow /home/imageflow/ && /home/imageflow/imageflow_server start --mount /ir4/local/:ir4_local:/home/imageflow/data/ --bind-address 0.0.0.0 --port 3000 --data-dir /home/imageflow/data/"'
-    environment:
-      - RUST_BACKTRACE=1
-    ports:
-      - '3000:3000'
-    volumes:
-      - './img:/home/imageflow/data'
+  # furenku_image_server:
+  #   image: 'imazen/imageflow_server_unsecured:latest'
+  #   entrypoint: '/bin/sh -c "sudo chown -R imageflow /home/imageflow/ && /home/imageflow/imageflow_server start --mount /api/v1/img-folder/:ir4_local:/home/imageflow/img-folder/ --bind-address 0.0.0.0 --port 3000 --data-dir /home/imageflow/img-folder/"'
+  #   environment:
+  #     - RUST_BACKTRACE=1
+  #   ports:
+  #     - '3000:3000'
+  #   volumes:
+  #     - './img-folder:/home/imageflow/img-folder'
+  #     - './src:/home/imageflow/src'
   furenku_image_uploader:
     container_name: furenku_image_uploader
     build: ./image_uploader
     ports:
       - "8000:8000"
     volumes:
-      - ./img:/home/src/img
+      - ./img-folder:/home/src/img-folder
+      - ./image_uploader:/home/src/

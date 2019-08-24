@@ -13,7 +13,7 @@ COPY package.json $HOME/package.json
 RUN npm install
 
 
-COPY .  $HOME
+#COPY .  $HOME
 
 EXPOSE 8000
 
