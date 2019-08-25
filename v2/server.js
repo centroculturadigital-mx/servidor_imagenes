@@ -1,5 +1,6 @@
 const koa = require('koa')
 const router = require('koa-router')
+const mount = require('koa-mount')
 const path = require('path')
 const multer = require('koa-multer');
 const Archivo = require('./modelos/archivo.js');
@@ -60,21 +61,32 @@ appRouter.get('/imagenes', async ctx => {
 appRouter.get('/imagen', async ctx => {
     await ctx.render('imagen', pug.locals, true)    
 });
-appRouter.get('*', async ctx => {
-    await ctx.render('no_encontrado', pug.locals, true)    
+
+
+
+
+// subir archivos
+
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, './archivos/imagenes/')
+    },
+    filename: function (req, file, cb) {
+      var fileFormat = (file.originalname).split('.')
+      cb(null, file.fieldname + '_' + Date.now() + '.' + fileFormat[fileFormat.length - 1])
+    }
+  })
+
+const upload = multer({
+    storage: storage,
+    dest: './archivos/imagenes'
 });
 
+app.use(mount('/archivos',require('koa-static')(__dirname + '/archivos')));
 
 
-
-// uploads
-
-
-
-
-const upload = multer({ dest: './uploads/'});
-
-appRouter.post('/upload', upload.single('image'), async ctx => {
+appRouter.post('/subir', upload.single('imagen'), async ctx => {
     try {
         
         const { file } = ctx.req;
@@ -108,6 +120,20 @@ appRouter.post('/upload', upload.single('image'), async ctx => {
 });
 
 
+// servir archivos
+
+
+
+appRouter.get('/test',async ctx => {
+    ctx.body="test!"
+})
+
+
+appRouter.get('*', async ctx => {
+    await ctx.render('no_encontrado', pug.locals, true)    
+});
+
+
 app.use(appRouter.routes());
 
 
@@ -118,5 +144,5 @@ app.listen(5000);
 app.on('error', err => {
     console.log('Server error', err);
 });
-console.log("image server", 5000);
+console.log("Servidor de imágenes", 5000);
 
