@@ -4,3 +4,10 @@ html
       title Servidor de Imágenes
    body
       h1 Imágenes
+
+      ul.imagenes
+         each val in locals.imagenes
+            article
+               //- h5= val.destino+val.nombreOriginal
+               h5= val.ruta
+               img(src=val.ruta)
