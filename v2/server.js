@@ -1,6 +1,7 @@
 const koa = require('koa')
 const router = require('koa-router')
 const path = require('path')
+const multer = require('koa-multer');
 
 const app = new koa();
 
@@ -27,12 +28,44 @@ appRouter.get('/', async ctx => {
 appRouter.get('/imagenes', async ctx => {
     await ctx.render('imagenes', pug.locals, true)    
 });
+appRouter.get('/imagen', async ctx => {
+    await ctx.render('imagen', pug.locals, true)    
+});
 appRouter.get('*', async ctx => {
     await ctx.render('no_encontrado', pug.locals, true)    
 });
 
 
+
+
+// uploads
+
+
+
+
+const upload = multer({ dest: './uploads/'});
+
+appRouter.post('/upload', upload.single('image'), async ctx => {
+    try {
+        
+        const { file } = ctx.req;
+
+        console.log("file",file);
+        
+        ctx.status = 200;
+        
+    } catch(err) {
+        console.error(err);
+        
+    }
+
+});
+
+
 app.use(appRouter.routes());
+
+
+
 
 app.listen(5000);
 

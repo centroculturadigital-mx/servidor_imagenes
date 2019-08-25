@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "koa": "^2.8.1",
+    "koa-multer": "^1.0.2",
     "koa-pug": "^4.0.2",
     "koa-router": "^7.4.0",
     "pug": "^2.0.4"
