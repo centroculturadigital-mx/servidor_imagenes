@@ -1,3 +1,5 @@
+const fs = require('fs')
+const {promisify} = require('util');
 const koa = require('koa')
 const router = require('koa-router')
 const mount = require('koa-mount')
@@ -117,7 +119,9 @@ appRouter.post('/subir', upload.single('imagen'), async ctx => {
         };
         
         let archivo = await Archivo.create(datosArchivo);
-                
+            
+        
+        imagenes(ctx)
         ctx.status = 200;
         
     } catch(err) {
@@ -133,12 +137,23 @@ app.use(bodyParser());
 app.use(override());
 
 
+const unlink = promisify(fs.unlink)
+
 appRouter.delete('/imagen', async ctx => {
     const { id } = ctx.request.body;
     
     const archivo = await Archivo.findOne({_id:id})
-    console.log(archivo);
-    
+
+    // TODO: Buscar archivo y eliminarlo
+    try {
+        let del = await unlink(__dirname + "/" + archivo.ruta)
+        console.log(del);            
+    } catch(err) {
+        console.log(err);
+        
+    }
+
+
     archivo.remove()
     
     try {
