@@ -5,9 +5,13 @@ html
    body
       h1 Imágenes
 
-      ul.imagenes
+      ul.imagenes(style="display:grid;grid-template-columns:1fr 1fr 1fr;")
          each val in locals.imagenes
             article
                //- h5= val.destino+val.nombreOriginal
                h5= val.ruta
-               img(src=val.ruta)
+               img(src=val.ruta,style="max-width: 4rem;") 
+               form(method="POST",action="/imagen")
+                  input(type="text",name="id",value=val.id,hidden)
+                  input(type="text",name="_method",value="DELETE",hidden)
+                  input(type="submit",value="Borrar")

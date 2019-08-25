@@ -3,6 +3,9 @@ const router = require('koa-router')
 const mount = require('koa-mount')
 const path = require('path')
 const multer = require('koa-multer');
+const bodyParser = require('koa-bodyparser');
+const override = require('koa-override');
+
 const Archivo = require('./modelos/archivo.js');
 
 const mongoose = require('mongoose');
@@ -39,25 +42,32 @@ const pug = new Pug({
 pug.locals.locale = 'es_MX'
 
 
-const appRouter = router(); //Instantiate the router
 
-appRouter.get('/', async ctx => {
-    await ctx.render('index', pug.locals, true)    
-});
-appRouter.get('/imagenes', async ctx => {
+
+
+
+// funcion para consultar imagenes
+const imagenes = async ctx => {
     
     try {
 
         const imagenes = await Archivo.find()
         pug.locals.imagenes = imagenes 
         
-        console.log(imagenes);
     } catch(err) {
         console.error(err);
     }
 
     await ctx.render('imagenes', pug.locals, true)    
+}
+
+
+const appRouter = router(); //Instantiate the router
+
+appRouter.get('/', async ctx => {
+    await ctx.render('index', pug.locals, true)    
 });
+appRouter.get('/imagenes', imagenes);
 appRouter.get('/imagen', async ctx => {
     await ctx.render('imagen', pug.locals, true)    
 });
@@ -90,10 +100,10 @@ appRouter.post('/subir', upload.single('imagen'), async ctx => {
     try {
         
         const { file } = ctx.req;
-
+        
         
         const extension = file.originalname.split('.')[file.originalname.split('.').length-1];
-
+        
         const datosArchivo = {
             nombreOriginal: file.originalname,
             nombreArchivo: `${file.filename}.${extension}`,
@@ -107,18 +117,36 @@ appRouter.post('/subir', upload.single('imagen'), async ctx => {
         };
         
         let archivo = await Archivo.create(datosArchivo);
-        
-        console.log(archivo);
-        
+                
         ctx.status = 200;
         
     } catch(err) {
         console.error(err);
         
     }
-
+    
 });
 
+
+// permitir put y delete desde <form>
+app.use(bodyParser());
+app.use(override());
+
+
+appRouter.delete('/imagen', async ctx => {
+    const { id } = ctx.request.body;
+    
+    const archivo = await Archivo.findOne({_id:id})
+    console.log(archivo);
+    
+    archivo.remove()
+    
+    try {
+        await imagenes( ctx );
+    } catch(err) {
+        console.error(err)
+    }
+});
 
 // servir archivos
 
