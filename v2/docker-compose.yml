@@ -9,6 +9,8 @@ services:
     volumes:
       - ./archivos:/usr/servidor_imagenes/archivos
       - ./:/usr/servidor_imagenes
+    depends_on:
+      - mongo
   mongo:
     container_name: mongo
     image: mongo
