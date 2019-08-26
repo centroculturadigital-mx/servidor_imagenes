@@ -20,6 +20,9 @@ pug = pug_load(app)
 
 const router = require('./routes/router')
 
+// const api = require('./api/imagen')
+
+
 
 app.use(mount('/archivos',require('koa-static')(__dirname + '/archivos')));
 
