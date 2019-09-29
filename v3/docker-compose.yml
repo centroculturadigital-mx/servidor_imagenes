@@ -1,0 +1,26 @@
+version: "3"
+services:
+  servidor_imagenes:
+    
+    container_name: servidor_imagenes
+    build: ./
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./archivos:/usr/servidor_imagenes/archivos
+      - ./:/usr/servidor_imagenes
+    depends_on:
+      - mongo
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - data-volume:/data/db
+    restart: always
+    logging:
+      driver: none
+volumes:
+  data-volume:
+

@@ -1,0 +1,16 @@
+doctype html
+html
+   head
+      title Servidor de Imágenes
+   body
+      h1 Imagen
+
+      form(action="/subir",method="post",enctype="multipart/form-data")
+
+         img(src="http://fakeimg.pl/300x300")
+         
+         label
+            span Subir Imagen
+            input(type="file",name="imagen")
+         
+         input(type="submit")
