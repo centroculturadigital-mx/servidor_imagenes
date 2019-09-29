@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 
 import Usuaria from "../modelos/Usuaria";
-import Directorio from "../modelos/Directorio";
-import Archivo from "../modelos/Archivo";
+import Proyecto from "../modelos/Proyecto";
+import Acceso from "../modelos/Acceso";
   
 const OrganizacionSchema = new mongoose.Schema({
     nombre: String,
     usuarias: [Usuaria],
-    directorios: [Directorio],
-    archivos: [Archivo],
+    accesos: [Acceso],
+    proyectos: [Proyecto],
 });
   
 module.exports = mongoose.model('Organizacion', OrganizacionSchema);

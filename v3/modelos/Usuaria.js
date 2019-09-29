@@ -6,11 +6,11 @@ import Archivo from "../modelos/Archivo";
   
 const UsuariaSchema = new mongoose.Schema({
     nombre_usuaria: String,
+    email: String,
     nombres: String,
     apellidos: String,
     contrasenna: String,
     avatar: String,
-
     organizaciones: [Organizacion],
     directorios: [Directorio],
     archivos: [Archivo],
